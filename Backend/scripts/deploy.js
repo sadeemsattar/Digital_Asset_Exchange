@@ -1,16 +1,18 @@
-const hardhat = require("hardhat");
+const { ethers } = require("hardhat");
 
 async function main() {
-  const Lock = await hardhat.ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
-
-  await lock.deployed();
-
-  console.log(
-    `Lock with 1 ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
+  const DigitalAssetExchangeMarketPlace = await ethers.getContractFactory(
+    "DigitalAssetExchangeMarketPlace"
   );
+
+  const DT = await DigitalAssetExchangeMarketPlace.deploy();
+
+  console.log("Contract Deploy At Address :", DT.address);
 }
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+
+main()
+  .then(() => process.emit(0))
+  .catch((err) => {
+    console.log(err);
+    process.exit(1);
+  });
