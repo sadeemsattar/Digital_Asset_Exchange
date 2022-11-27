@@ -49,9 +49,9 @@ export const AddNFT = () => {
   const uploadFile = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    // formData.append("file", File);
-    // console.log(formData.get("file"));
-    formData.append("id", "234");
+    formData.append("file", File);
+    console.log(formData.get("file"));
+    // formData.append("id", "234");
 
     const urlHash = await axios.post(
       "http://localhost:4000/addFile",
