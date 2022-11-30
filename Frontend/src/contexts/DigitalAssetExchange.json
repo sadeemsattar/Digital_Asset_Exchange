@@ -1,0 +1,307 @@
+{
+  "abi": [
+    { "type": "constructor", "inputs": [] },
+    {
+      "type": "function",
+      "stateMutability": "payable",
+      "outputs": [],
+      "name": "MarketPlaceOwnerCharges",
+      "inputs": [
+        { "type": "uint256", "name": "_amount", "internalType": "uint256" }
+      ]
+    },
+    {
+      "type": "function",
+      "stateMutability": "payable",
+      "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
+      "name": "MintDigitalItem",
+      "inputs": [
+        { "type": "uint256", "name": "price", "internalType": "uint256" },
+        { "type": "string", "name": "uri", "internalType": "string" }
+      ]
+    },
+    {
+      "type": "function",
+      "stateMutability": "nonpayable",
+      "outputs": [],
+      "name": "approve",
+      "inputs": [
+        { "type": "address", "name": "to", "internalType": "address" },
+        { "type": "uint256", "name": "tokenId", "internalType": "uint256" }
+      ]
+    },
+    {
+      "type": "function",
+      "stateMutability": "view",
+      "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
+      "name": "balanceOf",
+      "inputs": [
+        { "type": "address", "name": "owner", "internalType": "address" }
+      ]
+    },
+    {
+      "type": "function",
+      "stateMutability": "view",
+      "outputs": [{ "type": "address", "name": "", "internalType": "address" }],
+      "name": "getApproved",
+      "inputs": [
+        { "type": "uint256", "name": "tokenId", "internalType": "uint256" }
+      ]
+    },
+    {
+      "type": "function",
+      "stateMutability": "view",
+      "outputs": [
+        {
+          "type": "tuple[]",
+          "name": "",
+          "internalType": "struct DigitalAssetExchangeMarketPlace.DigitalItem[]",
+          "components": [
+            { "type": "uint256" },
+            { "type": "address" },
+            { "type": "address" },
+            { "type": "uint256" },
+            { "type": "bool" }
+          ]
+        }
+      ],
+      "name": "getDigitalItem",
+      "inputs": []
+    },
+    {
+      "type": "function",
+      "stateMutability": "view",
+      "outputs": [
+        {
+          "type": "tuple[]",
+          "name": "",
+          "internalType": "struct DigitalAssetExchangeMarketPlace.DigitalItem[]",
+          "components": [
+            { "type": "uint256" },
+            { "type": "address" },
+            { "type": "address" },
+            { "type": "uint256" },
+            { "type": "bool" }
+          ]
+        }
+      ],
+      "name": "getMarketPlaceDigitalItem",
+      "inputs": []
+    },
+    {
+      "type": "function",
+      "stateMutability": "view",
+      "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
+      "name": "getMarketPlaceOwnerCharges",
+      "inputs": []
+    },
+    {
+      "type": "function",
+      "stateMutability": "view",
+      "outputs": [
+        {
+          "type": "tuple[]",
+          "name": "",
+          "internalType": "struct DigitalAssetExchangeMarketPlace.DigitalItem[]",
+          "components": [
+            { "type": "uint256" },
+            { "type": "address" },
+            { "type": "address" },
+            { "type": "uint256" },
+            { "type": "bool" }
+          ]
+        }
+      ],
+      "name": "getUnsoldDigitalItem",
+      "inputs": []
+    },
+    {
+      "type": "function",
+      "stateMutability": "view",
+      "outputs": [{ "type": "bool", "name": "", "internalType": "bool" }],
+      "name": "isApprovedForAll",
+      "inputs": [
+        { "type": "address", "name": "owner", "internalType": "address" },
+        { "type": "address", "name": "operator", "internalType": "address" }
+      ]
+    },
+    {
+      "type": "function",
+      "stateMutability": "view",
+      "outputs": [{ "type": "string", "name": "", "internalType": "string" }],
+      "name": "name",
+      "inputs": []
+    },
+    {
+      "type": "function",
+      "stateMutability": "view",
+      "outputs": [{ "type": "address", "name": "", "internalType": "address" }],
+      "name": "owner",
+      "inputs": []
+    },
+    {
+      "type": "function",
+      "stateMutability": "view",
+      "outputs": [{ "type": "address", "name": "", "internalType": "address" }],
+      "name": "ownerOf",
+      "inputs": [
+        { "type": "uint256", "name": "tokenId", "internalType": "uint256" }
+      ]
+    },
+    {
+      "type": "function",
+      "stateMutability": "nonpayable",
+      "outputs": [],
+      "name": "renounceOwnership",
+      "inputs": []
+    },
+    {
+      "type": "function",
+      "stateMutability": "nonpayable",
+      "outputs": [],
+      "name": "safeTransferFrom",
+      "inputs": [
+        { "type": "address", "name": "from", "internalType": "address" },
+        { "type": "address", "name": "to", "internalType": "address" },
+        { "type": "uint256", "name": "tokenId", "internalType": "uint256" }
+      ]
+    },
+    {
+      "type": "function",
+      "stateMutability": "nonpayable",
+      "outputs": [],
+      "name": "safeTransferFrom",
+      "inputs": [
+        { "type": "address", "name": "from", "internalType": "address" },
+        { "type": "address", "name": "to", "internalType": "address" },
+        { "type": "uint256", "name": "tokenId", "internalType": "uint256" },
+        { "type": "bytes", "name": "data", "internalType": "bytes" }
+      ]
+    },
+    {
+      "type": "function",
+      "stateMutability": "payable",
+      "outputs": [],
+      "name": "sellDigitalItem",
+      "inputs": [
+        { "type": "uint256", "name": "tokenId", "internalType": "uint256" }
+      ]
+    },
+    {
+      "type": "function",
+      "stateMutability": "nonpayable",
+      "outputs": [],
+      "name": "setApprovalForAll",
+      "inputs": [
+        { "type": "address", "name": "operator", "internalType": "address" },
+        { "type": "bool", "name": "approved", "internalType": "bool" }
+      ]
+    },
+    {
+      "type": "function",
+      "stateMutability": "view",
+      "outputs": [{ "type": "bool", "name": "", "internalType": "bool" }],
+      "name": "supportsInterface",
+      "inputs": [
+        { "type": "bytes4", "name": "interfaceId", "internalType": "bytes4" }
+      ]
+    },
+    {
+      "type": "function",
+      "stateMutability": "view",
+      "outputs": [{ "type": "string", "name": "", "internalType": "string" }],
+      "name": "symbol",
+      "inputs": []
+    },
+    {
+      "type": "function",
+      "stateMutability": "view",
+      "outputs": [{ "type": "string", "name": "", "internalType": "string" }],
+      "name": "tokenURI",
+      "inputs": [
+        { "type": "uint256", "name": "tokenId", "internalType": "uint256" }
+      ]
+    },
+    {
+      "type": "function",
+      "stateMutability": "nonpayable",
+      "outputs": [],
+      "name": "transferFrom",
+      "inputs": [
+        { "type": "address", "name": "from", "internalType": "address" },
+        { "type": "address", "name": "to", "internalType": "address" },
+        { "type": "uint256", "name": "tokenId", "internalType": "uint256" }
+      ]
+    },
+    {
+      "type": "function",
+      "stateMutability": "nonpayable",
+      "outputs": [],
+      "name": "transferOwnership",
+      "inputs": [
+        { "type": "address", "name": "newOwner", "internalType": "address" }
+      ]
+    },
+    {
+      "type": "function",
+      "stateMutability": "payable",
+      "outputs": [],
+      "name": "updateDigitalItemPrice",
+      "inputs": [
+        { "type": "uint256", "name": "tokenId", "internalType": "uint256" },
+        { "type": "uint256", "name": "newPrice", "internalType": "uint256" }
+      ]
+    },
+    {
+      "type": "event",
+      "name": "Approval",
+      "inputs": [
+        { "type": "address", "name": "owner", "indexed": true },
+        { "type": "address", "name": "approved", "indexed": true },
+        { "type": "uint256", "name": "tokenId", "indexed": true }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "ApprovalForAll",
+      "inputs": [
+        { "type": "address", "name": "owner", "indexed": true },
+        { "type": "address", "name": "operator", "indexed": true },
+        { "type": "bool", "name": "approved", "indexed": false }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "DigitalItemCreated",
+      "inputs": [
+        { "type": "uint256", "name": "tokenID", "indexed": true },
+        { "type": "address", "name": "seller", "indexed": false },
+        { "type": "address", "name": "owner", "indexed": false },
+        { "type": "uint256", "name": "price", "indexed": false },
+        { "type": "bool", "name": "status", "indexed": false }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "OwnershipTransferred",
+      "inputs": [
+        { "type": "address", "name": "previousOwner", "indexed": true },
+        { "type": "address", "name": "newOwner", "indexed": true }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "Transfer",
+      "inputs": [
+        { "type": "address", "name": "from", "indexed": true },
+        { "type": "address", "name": "to", "indexed": true },
+        { "type": "uint256", "name": "tokenId", "indexed": true }
+      ],
+      "anonymous": false
+    }
+  ]
+}
