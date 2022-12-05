@@ -1,4 +1,6 @@
-import React from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState } from "react";
+import { ethers } from "ethers";
 import {
   Table,
   TableBody,
@@ -10,55 +12,237 @@ import {
   Paper,
   Button,
 } from "@material-ui/core";
+import useEth from "../../contexts/useEth";
+import { useWeb3React } from "@web3-react/core";
+import Web3 from "web3";
+import axios from "axios";
 
 export const PurchaseNFT = () => {
-  function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-  }
+  const {
+    state: { contract },
+  } = useEth();
 
-  const rows = [
-    createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-    createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-    createData("Eclair", 262, 16.0, 24, 6.0),
-    createData("Cupcake", 305, 3.7, 67, 4.3),
-    createData("Gingerbread", 356, 16.0, 49, 3.9),
-  ];
+  const { active, account } = useWeb3React();
+
+  const [data, setData] = useState([]);
+
+  const verifyDocument = async (seller, fileCID, signature) => {
+    const fileData = await axios.post("http://localhost:4000/getFile", {
+      Hash: fileCID,
+    });
+
+    const verifyAddress = ethers.utils.verifyMessage(
+      `data:image/png;base64,${fileData.data}`,
+      signature
+    );
+
+    if (seller === verifyAddress) {
+      let check = true;
+      let newSignature = `data:image/png;base64,${fileData.data}`;
+      return { check, newSignature };
+    } else {
+      let check = false;
+      let newSignature = `data:image/png;base64,${fileData.data}`;
+      return { check, newSignature };
+    }
+  };
+
+  const minting = async (tokenId, seller, price, fileCID, signature) => {
+    if (active) {
+      if (seller !== account) {
+        // console.log("Mining Price", Web3.utils.toWei(`${price}`, "ether"));
+        let { check, newSignature } = await verifyDocument(
+          seller,
+          fileCID,
+          signature
+        );
+        console.log(check, newSignature);
+        if (check && newSignature) {
+          if (!window.ethereum) {
+            throw new Error("No Wallet");
+          }
+          await window.ethereum.send("eth_requestAccounts");
+          const provider = new ethers.providers.Web3Provider(window.ethereum);
+          const signer = provider.getSigner();
+          const newsignature = await signer.signMessage(newSignature);
+          await contract.methods.sellDigitalItem(tokenId, newsignature).send({
+            from: account,
+            gas: "3000000",
+            value: Web3.utils.toWei(`${price}`, "ether"),
+          });
+          getData();
+        } else {
+          console.log("Invalid Document");
+        }
+      } else {
+        console.log("You Are Seller Of This NFT Therefor You Cannnot Buy This");
+      }
+    } else {
+      console.log("Connect Account!");
+    }
+  };
+
+  const getData = async () => {
+    const result = await contract.methods.getUnsoldDigitalItem().call({
+      from: account,
+    });
+    // result[0].shift();
+    console.log(result);
+    setData(result);
+  };
 
   return (
     <Container maxWidth="lg">
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} size="small">
+      <TableContainer
+        component={Paper}
+        style={{
+          marginTop: "100px",
+        }}
+      >
+        <Button variant="contained" color="secondary" onClick={getData}>
+          View
+        </Button>
+        <Table
+          sx={{ minWidth: 650 }}
+          size="small"
+          style={{ backgroundColor: "#cfe8fc" }}
+        >
           <TableHead>
-            <TableRow>
-              <TableCell>Title</TableCell>
-              <TableCell align="right">Description</TableCell>
-              <TableCell align="right">Seller</TableCell>
-              <TableCell align="right">Owner</TableCell>
-              <TableCell align="right">Price</TableCell>
-              <TableCell align="right">Url</TableCell>
-              <TableCell align="right">Status</TableCell>
-              <TableCell align="right">Show</TableCell>
+            <TableRow
+              style={{
+                backgroundColor: "#F3BFC6",
+              }}
+            >
+              <TableCell
+                style={{
+                  fontWeight: "bold",
+                  fontSize: 16,
+                  color: "#C62662",
+                  padding: "15px",
+                }}
+              >
+                Token ID
+              </TableCell>
+
+              <TableCell
+                align="right"
+                style={{
+                  fontWeight: "bold",
+                  fontSize: 16,
+                  color: "#C62662",
+                }}
+              >
+                Seller
+              </TableCell>
+              <TableCell
+                align="right"
+                style={{
+                  fontWeight: "bold",
+                  fontSize: 16,
+                  color: "#C62662",
+                }}
+              >
+                Owner
+              </TableCell>
+              <TableCell
+                align="right"
+                style={{
+                  fontWeight: "bold",
+                  fontSize: 16,
+                  color: "#C62662",
+                }}
+              >
+                Price
+              </TableCell>
+              {/* <TableCell
+                align="right"
+                style={{
+                  fontWeight: "bold",
+                  fontSize: 16,
+                  color: "#C62662",
+                }}
+              >
+                Url
+              </TableCell> */}
+              <TableCell
+                align="right"
+                style={{
+                  fontWeight: "bold",
+                  fontSize: 16,
+                  color: "#C62662",
+                }}
+              >
+                Show
+              </TableCell>
+              <TableCell
+                align="right"
+                style={{
+                  fontWeight: "bold",
+                  fontSize: 16,
+                  color: "#C62662",
+                }}
+              >
+                Mint
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {data.map((row) => (
               <TableRow
-                key={row.name}
+                key={row[0]}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  {row.name}
+                  {row[0]}
                 </TableCell>
-                <TableCell align="right">{row.calories}</TableCell>
-                <TableCell align="right">{row.fat}</TableCell>
-                <TableCell align="right">{row.carbs}</TableCell>
-                <TableCell align="right">{row.protein}</TableCell>
-                <TableCell align="right">{row.protein}</TableCell>
-                <TableCell align="right">{row.protein}</TableCell>
+                <TableCell align="right">{row[1]}</TableCell>
+                <TableCell align="right">{row[2]}</TableCell>
                 <TableCell align="right">
-                  {/* <Button variant="contained" color="secondary">
-                    View
-                  </Button> */}
+                  {Web3.utils.fromWei(`${row[3]}`, "ether")} Eth
+                </TableCell>
+                {/* <TableCell              Cell align="right">
+                  <a
+                    href={`https://testnets.opensea.io/assets/optimism-goerli/0xaa305c77b901a25efdcdb4fe2c37503dcd42fec9/${row[0]}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Visit Page
+                  </a>
+                </TableCell> */}
+
+                <TableCell align="right">
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    // onClick={() => {
+                    //   gettokenUri(row[0]);
+                    // }}
+                  >
+                    <a
+                      href={`https://testnets.opensea.io/assets/optimism-goerli/0x4CcF84d1054f9E0b77726398d31F99D0D4496542/${row[0]}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View Token
+                    </a>
+                  </Button>
+                </TableCell>
+                <TableCell align="right">
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => {
+                      minting(
+                        row[0],
+                        row[1],
+                        Web3.utils.fromWei(`${row[3]}`, "ether"),
+                        row[5],
+                        row[6]
+                      );
+                    }}
+                  >
+                    Mint Token
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

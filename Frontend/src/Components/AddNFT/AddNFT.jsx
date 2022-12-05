@@ -1,8 +1,13 @@
 import React from "react";
+
 import { makeStyles } from "@material-ui/core/styles";
 import { Button, Container, TextField, Typography } from "@material-ui/core";
 import { useState } from "react";
+import { useWeb3React } from "@web3-react/core";
 import axios from "axios";
+import Web3 from "web3";
+import { ethers } from "ethers";
+import useEth from "../../contexts/useEth";
 const useStyles = makeStyles((theme) => ({
   conatiner: {
     backgroundColor: "#cfe8fc",
@@ -41,17 +46,21 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const AddNFT = () => {
+  const { active, account } = useWeb3React();
+  const {
+    state: { contract },
+  } = useEth();
   const classes = useStyles();
   const [Title, setTitle] = useState("");
   const [Description, setDescription] = useState("");
   const [Price, setPrice] = useState();
   const [File, setFile] = useState("");
+  const [signature, setSignature] = useState("");
   const uploadFile = async (e) => {
     e.preventDefault();
+
     const formData = new FormData();
     formData.append("file", File);
-    console.log(formData.get("file"));
-    // formData.append("id", "234");
 
     const urlHash = await axios.post(
       "http://localhost:4000/addFile",
@@ -62,6 +71,53 @@ export const AddNFT = () => {
         },
       }
     );
+    console.log(urlHash.data);
+    const metaDataHash = await axios.post("http://localhost:4000/addMetaData", {
+      urlHash: urlHash.data,
+      Title: Title,
+      Description: Description,
+      Price: Price,
+    });
+    console.log(metaDataHash.data);
+    console.log(contract);
+    console.log(signature);
+
+    const id = await contract.methods
+      .MintDigitalItem(
+        Web3.utils.toWei(`${Price}`, "ether"),
+        `https://infura-ipfs.io/ipfs/${metaDataHash.data}`,
+        urlHash.data,
+        signature
+      )
+      .send({
+        from: account,
+        gas: "3000000",
+        value: Web3.utils.toWei(`${0.001}`, "ether"),
+      });
+    console.log(id);
+  };
+
+  const getSignature = async (e) => {
+    e.preventDefault();
+    var buffer = new FileReader();
+
+    buffer.readAsDataURL(File, { encoding: "utf8", flag: "r" });
+    buffer.onload = async (e) => {
+      // fileContent = e.target.result;
+
+      // console.log("File To String", e.target.result);
+      if (!window.ethereum) {
+        throw new Error("No Wallet");
+      }
+      await window.ethereum.send("eth_requestAccounts");
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const signature = await signer.signMessage(e.target.result);
+
+      // const getAddress = await signer.getAddress();
+      // console.log("signature", signature, getAddress, account);
+      setSignature(signature);
+    };
   };
   return (
     <Container maxWidth="sm" className={classes.conatiner}>
@@ -96,11 +152,18 @@ export const AddNFT = () => {
           className={classes.button}
           onChange={(e) => setFile(e.target.files[0])}
         />
-
-        <Button className={classes.button} onClick={uploadFile}>
-          Submit
+        <Button className={classes.button} onClick={getSignature}>
+          Sign
         </Button>
+        {signature ? (
+          <Button className={classes.button} onClick={uploadFile}>
+            Submit
+          </Button>
+        ) : (
+          ""
+        )}
       </form>
+      {active ? <div>{account}</div> : ""}
     </Container>
   );
 };

@@ -1,4 +1,5 @@
-import React from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState } from "react";
 import {
   Table,
   TableBody,
@@ -10,19 +11,26 @@ import {
   Paper,
   Button,
 } from "@material-ui/core";
-
+import useEth from "../../contexts/useEth";
+import { useWeb3React } from "@web3-react/core";
+import Web3 from "web3";
 export const ShowNFT = () => {
-  function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-  }
+  const {
+    state: { contract },
+  } = useEth();
 
-  const rows = [
-    createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-    createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-    createData("Eclair", 262, 16.0, 24, 6.0),
-    createData("Cupcake", 305, 3.7, 67, 4.3),
-    createData("Gingerbread", 356, 16.0, 49, 3.9),
-  ];
+  const { account } = useWeb3React();
+
+  const [data, setData] = useState([]);
+
+  const getData = async () => {
+    // pirticular seller
+    const result = await contract.methods.getDigitalItem().call({
+      from: account,
+    });
+    console.log(result);
+    setData(result);
+  };
 
   return (
     <Container maxWidth="lg">
@@ -32,6 +40,9 @@ export const ShowNFT = () => {
           marginTop: "100px",
         }}
       >
+        <Button variant="contained" color="secondary" onClick={getData}>
+          View
+        </Button>
         <Table
           sx={{ minWidth: 650 }}
           size="small"
@@ -51,18 +62,9 @@ export const ShowNFT = () => {
                   padding: "15px",
                 }}
               >
-                Title
+                Token ID
               </TableCell>
-              <TableCell
-                align="right"
-                style={{
-                  fontWeight: "bold",
-                  fontSize: 16,
-                  color: "#C62662",
-                }}
-              >
-                Description
-              </TableCell>
+
               <TableCell
                 align="right"
                 style={{
@@ -93,7 +95,7 @@ export const ShowNFT = () => {
               >
                 Price
               </TableCell>
-              <TableCell
+              {/* <TableCell
                 align="right"
                 style={{
                   fontWeight: "bold",
@@ -102,8 +104,8 @@ export const ShowNFT = () => {
                 }}
               >
                 Url
-              </TableCell>
-              <TableCell
+              </TableCell> */}
+              {/* <TableCell
                 align="right"
                 style={{
                   fontWeight: "bold",
@@ -112,7 +114,7 @@ export const ShowNFT = () => {
                 }}
               >
                 Status
-              </TableCell>
+              </TableCell> */}
               <TableCell
                 align="right"
                 style={{
@@ -126,23 +128,45 @@ export const ShowNFT = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {data.map((row) => (
               <TableRow
-                key={row.name}
+                key={row[0]}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  {row.name}
+                  {row[0]}
                 </TableCell>
-                <TableCell align="right">{row.calories}</TableCell>
-                <TableCell align="right">{row.fat}</TableCell>
-                <TableCell align="right">{row.carbs}</TableCell>
-                <TableCell align="right">{row.protein}</TableCell>
-                <TableCell align="right">{row.protein}</TableCell>
-                <TableCell align="right">{row.protein}</TableCell>
+                <TableCell align="right">{row[1]}</TableCell>
+                <TableCell align="right">{row[2]}</TableCell>
                 <TableCell align="right">
-                  <Button variant="contained" color="secondary">
-                    View
+                  {" "}
+                  {Web3.utils.fromWei(`${row[3]}`, "ether")} Eth
+                </TableCell>
+                {/* <TableCell align="right">
+                  <a
+                    href={`https://testnets.opensea.io/assets/optimism-goerli/0xaa305c77b901a25efdcdb4fe2c37503dcd42fec9/${row[0]}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Visit Page
+                  </a>
+                </TableCell> */}
+
+                <TableCell align="right">
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    // onClick={() => {
+                    //   // gettokenUri(row[0]);
+                    // }}
+                  >
+                    <a
+                      href={`https://testnets.opensea.io/assets/optimism-goerli/0x4CcF84d1054f9E0b77726398d31F99D0D4496542/${row[0]}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View Token
+                    </a>
                   </Button>
                 </TableCell>
               </TableRow>

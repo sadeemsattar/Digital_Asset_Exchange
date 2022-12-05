@@ -9,7 +9,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useWeb3React } from "@web3-react/core";
 import { injected } from "../../contexts/connect";
 import { useEffect } from "react";
-import abi from "../../contexts/DigitalAssetExchange.json";
+import { useNavigate } from "react-router-dom";
 import useEth from "../../contexts/useEth";
 const useStyles = makeStyles((theme) => ({
   rootbox: {
@@ -36,26 +36,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 export const Login = () => {
+  const navigate = useNavigate();
   const { active, account, library, activate, deactivate } = useWeb3React();
-  const {
-    state: { accounts, contract },
-    dispatch,
-  } = useEth();
+
   const classes = useStyles();
   useEffect(() => {
-    console.log("account in useEffect", account);
-    if (active) {
-      const contract = new library.eth.Contract(
-        abi,
-        "0xaa305c77b901a25EfdCDb4fE2c37503dcd42fEC9"
-      );
-      console.log(contract);
-    }
-  }, [account]);
-
+    deactivate();
+  }, []);
   const connectWallet = async () => {
     try {
       await activate(injected);
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
@@ -98,8 +89,8 @@ export const Login = () => {
             >
               DisConnect Wallet
             </Button>
-            {active ? <div>{account}</div> : ""}
           </div>
+          {active ? <div>{account}</div> : ""}
         </Typography>
       </Container>
     </>

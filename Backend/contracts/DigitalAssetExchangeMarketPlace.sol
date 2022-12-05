@@ -20,6 +20,9 @@ contract DigitalAssetExchangeMarketPlace is ERC721, ERC721URIStorage, Ownable {
         address payable Seller;
         address payable Owner;
         uint256 Price;
+        string metaData;
+        string fileCID;
+        string Signature;
         bool Status;
     }
     mapping(uint256 => DigitalItem) private digitalItemHistory;
@@ -37,6 +40,9 @@ contract DigitalAssetExchangeMarketPlace is ERC721, ERC721URIStorage, Ownable {
         address seller,
         address owner,
         uint256 price,
+        string metaData,
+        string fileCID,
+        string signature,
         bool status
     );
 
@@ -49,8 +55,8 @@ contract DigitalAssetExchangeMarketPlace is ERC721, ERC721URIStorage, Ownable {
     }
     modifier checkPrice(uint256 price) {
         require(
-            price > 0,
-            "Please Set Price Of Digital Assest To Atleast 1 Eth"
+            price > 0 ether,
+            "Please Set Price Of Digital Assest To Atleast 0 Eth"
         );
         _;
     }
@@ -72,32 +78,38 @@ contract DigitalAssetExchangeMarketPlace is ERC721, ERC721URIStorage, Ownable {
 
     //  Create NFT Token For Document
 
-    function MintDigitalItem(uint256 price, string memory uri)
-        public
-        payable
-        returns (uint256)
-    {
-        _tokenIdCounter.increment();
+    function MintDigitalItem(
+        uint256 price,
+        string memory uri,
+        string memory fileCID,
+        string memory signature
+    ) public payable returns (uint256) {
         uint256 currentTokenId = _tokenIdCounter.current();
 
         _mint(msg.sender, currentTokenId);
 
         _setTokenURI(currentTokenId, uri);
 
-        createDigitalItem(currentTokenId, price);
+        createDigitalItem(currentTokenId, price, uri, fileCID, signature);
+        _tokenIdCounter.increment();
         return currentTokenId;
     }
 
-    function createDigitalItem(uint256 tokenId, uint256 price)
-        private
-        checkPrice(price)
-        checkValue
-    {
+    function createDigitalItem(
+        uint256 tokenId,
+        uint256 price,
+        string memory metaData,
+        string memory fileCID,
+        string memory signature
+    ) private checkValue checkPrice(price) {
         digitalItemHistory[tokenId] = DigitalItem(
             tokenId,
             payable(msg.sender),
             payable(address(this)),
             price,
+            metaData,
+            fileCID,
+            signature,
             false
         );
         ItemHistory[msg.sender].push(
@@ -106,6 +118,9 @@ contract DigitalAssetExchangeMarketPlace is ERC721, ERC721URIStorage, Ownable {
                 payable(msg.sender),
                 payable(address(this)),
                 price,
+                metaData,
+                fileCID,
+                signature,
                 false
             )
         );
@@ -118,11 +133,17 @@ contract DigitalAssetExchangeMarketPlace is ERC721, ERC721URIStorage, Ownable {
             msg.sender,
             address(this),
             price,
+            metaData,
+            fileCID,
+            signature,
             false
         );
     }
 
-    function sellDigitalItem(uint256 tokenId) public payable {
+    function sellDigitalItem(uint256 tokenId, string memory newsignature)
+        public
+        payable
+    {
         uint256 price = digitalItemHistory[tokenId].Price;
 
         require(price == msg.value, "Insufficent Amount!");
@@ -130,6 +151,7 @@ contract DigitalAssetExchangeMarketPlace is ERC721, ERC721URIStorage, Ownable {
         digitalItemHistory[tokenId].Owner = payable(msg.sender);
         digitalItemHistory[tokenId].Seller = payable(address(0));
         digitalItemHistory[tokenId].Status = true;
+        digitalItemHistory[tokenId].Signature = newsignature;
 
         _itemsSold.increment();
 
@@ -167,7 +189,7 @@ contract DigitalAssetExchangeMarketPlace is ERC721, ERC721URIStorage, Ownable {
     {
         uint256 totalDigitalAssets = _tokenIdCounter.current();
         uint256 countItem = 0;
-        for (uint256 i = 1; i < totalDigitalAssets; i++) {
+        for (uint256 i = 0; i < totalDigitalAssets; i++) {
             if (digitalItemHistory[i].Owner == msg.sender) {
                 countItem += 1;
             }
@@ -175,7 +197,7 @@ contract DigitalAssetExchangeMarketPlace is ERC721, ERC721URIStorage, Ownable {
         DigitalItem[] memory list = new DigitalItem[](countItem);
 
         uint256 j = 0;
-        for (uint256 i = 1; i < totalDigitalAssets; i++) {
+        for (uint256 i = 0; i < totalDigitalAssets; i++) {
             if (digitalItemHistory[i].Owner == msg.sender) {
                 DigitalItem storage item = digitalItemHistory[i];
                 list[j] = item;
@@ -189,7 +211,7 @@ contract DigitalAssetExchangeMarketPlace is ERC721, ERC721URIStorage, Ownable {
     function getDigitalItem() public view returns (DigitalItem[] memory) {
         uint256 totalDigitalAssets = _tokenIdCounter.current();
         uint256 countItem = 0;
-        for (uint256 i = 1; i < totalDigitalAssets; i++) {
+        for (uint256 i = 0; i < totalDigitalAssets; i++) {
             if (digitalItemHistory[i].Seller == msg.sender) {
                 countItem += 1;
             }
@@ -197,7 +219,7 @@ contract DigitalAssetExchangeMarketPlace is ERC721, ERC721URIStorage, Ownable {
         DigitalItem[] memory list = new DigitalItem[](countItem);
 
         uint256 j = 0;
-        for (uint256 i = 1; i < totalDigitalAssets; i++) {
+        for (uint256 i = 0; i < totalDigitalAssets; i++) {
             if (digitalItemHistory[i].Seller == msg.sender) {
                 DigitalItem storage item = digitalItemHistory[i];
                 list[j] = item;
@@ -213,7 +235,7 @@ contract DigitalAssetExchangeMarketPlace is ERC721, ERC721URIStorage, Ownable {
         uint256 unsoldCount = totalDigitalAssets - _itemsSold.current();
         DigitalItem[] memory list = new DigitalItem[](unsoldCount);
         uint256 j = 0;
-        for (uint256 i = 1; i < totalDigitalAssets; i++) {
+        for (uint256 i = 0; i < totalDigitalAssets; i++) {
             if (digitalItemHistory[i].Owner == address(this)) {
                 DigitalItem storage item = digitalItemHistory[i];
                 list[j] = item;

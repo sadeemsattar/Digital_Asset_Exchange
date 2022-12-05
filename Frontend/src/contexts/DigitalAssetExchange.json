@@ -17,7 +17,9 @@
       "name": "MintDigitalItem",
       "inputs": [
         { "type": "uint256", "name": "price", "internalType": "uint256" },
-        { "type": "string", "name": "uri", "internalType": "string" }
+        { "type": "string", "name": "uri", "internalType": "string" },
+        { "type": "string", "name": "fileCID", "internalType": "string" },
+        { "type": "string", "name": "signature", "internalType": "string" }
       ]
     },
     {
@@ -61,6 +63,9 @@
             { "type": "address" },
             { "type": "address" },
             { "type": "uint256" },
+            { "type": "string" },
+            { "type": "string" },
+            { "type": "string" },
             { "type": "bool" }
           ]
         }
@@ -81,6 +86,9 @@
             { "type": "address" },
             { "type": "address" },
             { "type": "uint256" },
+            { "type": "string" },
+            { "type": "string" },
+            { "type": "string" },
             { "type": "bool" }
           ]
         }
@@ -108,6 +116,9 @@
             { "type": "address" },
             { "type": "address" },
             { "type": "uint256" },
+            { "type": "string" },
+            { "type": "string" },
+            { "type": "string" },
             { "type": "bool" }
           ]
         }
@@ -184,7 +195,8 @@
       "outputs": [],
       "name": "sellDigitalItem",
       "inputs": [
-        { "type": "uint256", "name": "tokenId", "internalType": "uint256" }
+        { "type": "uint256", "name": "tokenId", "internalType": "uint256" },
+        { "type": "string", "name": "newsignature", "internalType": "string" }
       ]
     },
     {
@@ -280,6 +292,9 @@
         { "type": "address", "name": "seller", "indexed": false },
         { "type": "address", "name": "owner", "indexed": false },
         { "type": "uint256", "name": "price", "indexed": false },
+        { "type": "string", "name": "metaData", "indexed": false },
+        { "type": "string", "name": "fileCID", "indexed": false },
+        { "type": "string", "name": "signature", "indexed": false },
         { "type": "bool", "name": "status", "indexed": false }
       ],
       "anonymous": false
