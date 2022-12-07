@@ -116,6 +116,11 @@ export const AddNFT = () => {
 
       setTimeout(() => {
         handleClose();
+        setSignature("");
+        setFile("");
+        setPrice("");
+        setTitle("");
+        setDescription("");
       }, 2000);
     }
 
@@ -123,7 +128,7 @@ export const AddNFT = () => {
   };
 
   const getSignature = async (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     var buffer = new FileReader();
 
     buffer.readAsDataURL(File, { encoding: "utf8", flag: "r" });
@@ -176,6 +181,7 @@ export const AddNFT = () => {
           color="secondary"
           className={classes.button}
           onChange={(e) => setFile(e.target.files[0])}
+          inputProps={{ accept: "image/png" }}
         />
         <Button className={classes.button} onClick={getSignature}>
           Sign

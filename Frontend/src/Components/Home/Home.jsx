@@ -7,7 +7,7 @@ import { useWeb3React } from "@web3-react/core";
 import Button from "@material-ui/core/Button";
 import { useNavigate } from "react-router-dom";
 import { Outlet } from "react-router-dom";
-import { ButtonGroup, Snackbar } from "@material-ui/core";
+import { ButtonGroup } from "@material-ui/core";
 import { useEffect } from "react";
 import { Disconnect } from "./Disconnect";
 import { injected } from "../../contexts/connect";

@@ -63,7 +63,7 @@ export const PurchaseNFT = () => {
       handleClick();
       if (seller !== account) {
         // console.log("Mining Price", Web3.utils.toWei(`${price}`, "ether"));
-        setMessage("Verifying...");
+        setMessage("Verifying... ");
         let { check, newSignature } = await verifyDocument(
           seller,
           fileCID,
