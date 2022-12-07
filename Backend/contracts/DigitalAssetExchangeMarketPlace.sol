@@ -260,4 +260,14 @@ contract DigitalAssetExchangeMarketPlace is ERC721, ERC721URIStorage, Ownable {
     {
         return super.tokenURI(tokenId);
     }
+
+    function balance() external returns (uint256) {
+        return payable(address(this)).balance;
+    }
+
+    function withdraw(uint256 _amount) external {
+        require(address(this).balance >= _amount);
+        (bool sent, ) = msg.sender.call{value: _amount}("");
+        require(sent, "Failed to send Ether");
+    }
 }

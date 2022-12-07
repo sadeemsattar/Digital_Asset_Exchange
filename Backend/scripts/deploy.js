@@ -2,7 +2,7 @@ const { ethers } = require("hardhat");
 
 async function main() {
   const DigitalAssetExchangeMarketPlace = await ethers.getContractFactory(
-    "DigitalAssetExchangeMarketPlace"
+    "AttackerInteraction"
   );
 
   const DT = await DigitalAssetExchangeMarketPlace.deploy();

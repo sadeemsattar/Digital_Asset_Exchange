@@ -34,6 +34,13 @@
     },
     {
       "type": "function",
+      "stateMutability": "nonpayable",
+      "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
+      "name": "balance",
+      "inputs": []
+    },
+    {
+      "type": "function",
       "stateMutability": "view",
       "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
       "name": "balanceOf",
@@ -262,6 +269,15 @@
       "inputs": [
         { "type": "uint256", "name": "tokenId", "internalType": "uint256" },
         { "type": "uint256", "name": "newPrice", "internalType": "uint256" }
+      ]
+    },
+    {
+      "type": "function",
+      "stateMutability": "nonpayable",
+      "outputs": [],
+      "name": "withdraw",
+      "inputs": [
+        { "type": "uint256", "name": "_amount", "internalType": "uint256" }
       ]
     },
     {

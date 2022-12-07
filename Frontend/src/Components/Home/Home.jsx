@@ -7,7 +7,7 @@ import { useWeb3React } from "@web3-react/core";
 import Button from "@material-ui/core/Button";
 import { useNavigate } from "react-router-dom";
 import { Outlet } from "react-router-dom";
-import { ButtonGroup } from "@material-ui/core";
+import { ButtonGroup, Snackbar } from "@material-ui/core";
 import { useEffect } from "react";
 import { Disconnect } from "./Disconnect";
 import { injected } from "../../contexts/connect";
@@ -39,22 +39,15 @@ export const Home = () => {
   const navigate = useNavigate();
   const { active, account, library, activate, deactivate } = useWeb3React();
   const { dispatch } = useEth();
-  // const [accounts, setaccounts] = useState(account);
-  // const disconnect = useCallback(async () => {
-  //   console.log(accounts);
-  //   try {
-  //     await deactivate();
-  //     // navigate("/login");
-  //   } catch (exception) {
-  //     console.log(exception);
-  //   }
-  // }, [accounts]);
 
   const disconnect = async () => {
     console.log(account);
+
     try {
       await deactivate();
-      navigate("/login");
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
     } catch (exception) {
       console.log(exception);
     }
@@ -72,7 +65,8 @@ export const Home = () => {
         // "0xf46287916fF7f1b2c00B9c44aD9cCebbf42b512b"
         // "0xCDeEAbA8b7e0812ecD92EA2908624f1b7D6ac1b3"
         // "0x4CcF84d1054f9E0b77726398d31F99D0D4496542"
-        "0x4f67e7c9d42a38FACEAf5DE2DdB5596561bbBD20"
+        // "0x4f67e7c9d42a38FACEAf5DE2DdB5596561bbBD20"
+        "0xeec91F5F76773548B659Fb1f9506361418530AE4"
       );
       dispatch({ type: actions.init, data: { contract } });
       console.log(contract);

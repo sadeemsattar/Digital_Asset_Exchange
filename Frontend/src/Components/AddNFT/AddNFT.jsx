@@ -1,13 +1,20 @@
 import React from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
-import { Button, Container, TextField, Typography } from "@material-ui/core";
+import {
+  Button,
+  Container,
+  Snackbar,
+  TextField,
+  Typography,
+} from "@material-ui/core";
 import { useState } from "react";
 import { useWeb3React } from "@web3-react/core";
 import axios from "axios";
 import Web3 from "web3";
 import { ethers } from "ethers";
 import useEth from "../../contexts/useEth";
+import { Alert } from "@mui/material";
 const useStyles = makeStyles((theme) => ({
   conatiner: {
     backgroundColor: "#cfe8fc",
@@ -46,7 +53,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const AddNFT = () => {
-  const { active, account } = useWeb3React();
+  const { account } = useWeb3React();
+
   const {
     state: { contract },
   } = useEth();
@@ -56,12 +64,21 @@ export const AddNFT = () => {
   const [Price, setPrice] = useState();
   const [File, setFile] = useState("");
   const [signature, setSignature] = useState("");
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState("Adding NFT wait ...");
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   const uploadFile = async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
     formData.append("file", File);
-
+    handleClick();
     const urlHash = await axios.post(
       "http://localhost:4000/addFile",
       formData,
@@ -71,16 +88,16 @@ export const AddNFT = () => {
         },
       }
     );
-    console.log(urlHash.data);
+    // console.log(urlHash.data);
     const metaDataHash = await axios.post("http://localhost:4000/addMetaData", {
       urlHash: urlHash.data,
       Title: Title,
       Description: Description,
       Price: Price,
     });
-    console.log(metaDataHash.data);
-    console.log(contract);
-    console.log(signature);
+    // console.log(metaDataHash.data);
+    // console.log(contract);
+    // console.log(signature);
 
     const id = await contract.methods
       .MintDigitalItem(
@@ -94,6 +111,14 @@ export const AddNFT = () => {
         gas: "3000000",
         value: Web3.utils.toWei(`${0.001}`, "ether"),
       });
+    if (id) {
+      setMessage("Added Successfull");
+
+      setTimeout(() => {
+        handleClose();
+      }, 2000);
+    }
+
     console.log(id);
   };
 
@@ -163,7 +188,20 @@ export const AddNFT = () => {
           ""
         )}
       </form>
-      {active ? <div>{account}</div> : ""}
+      <Snackbar
+        style={{ marginTop: "50px", backgroundColor: "green" }}
+        open={open}
+        // autoHideDuration={2000}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+      >
+        <Alert variant="filled" severity="success">
+          {message}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

@@ -11,11 +11,13 @@ import {
   TableRow,
   Paper,
   Button,
+  Snackbar,
 } from "@material-ui/core";
 import useEth from "../../contexts/useEth";
 import { useWeb3React } from "@web3-react/core";
 import Web3 from "web3";
 import axios from "axios";
+import { Alert } from "@mui/material";
 
 export const PurchaseNFT = () => {
   const {
@@ -25,7 +27,16 @@ export const PurchaseNFT = () => {
   const { active, account } = useWeb3React();
 
   const [data, setData] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState("Adding NFT wait ...");
 
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   const verifyDocument = async (seller, fileCID, signature) => {
     const fileData = await axios.post("http://localhost:4000/getFile", {
       Hash: fileCID,
@@ -49,14 +60,16 @@ export const PurchaseNFT = () => {
 
   const minting = async (tokenId, seller, price, fileCID, signature) => {
     if (active) {
+      handleClick();
       if (seller !== account) {
         // console.log("Mining Price", Web3.utils.toWei(`${price}`, "ether"));
+        setMessage("Verifying...");
         let { check, newSignature } = await verifyDocument(
           seller,
           fileCID,
           signature
         );
-        console.log(check, newSignature);
+        // console.log(check, newSignature);
         if (check && newSignature) {
           if (!window.ethereum) {
             throw new Error("No Wallet");
@@ -70,12 +83,14 @@ export const PurchaseNFT = () => {
             gas: "3000000",
             value: Web3.utils.toWei(`${price}`, "ether"),
           });
+          handleClick();
+          setMessage("Mint Success");
           getData();
         } else {
-          console.log("Invalid Document");
+          setMessage("Invalid Document");
         }
       } else {
-        console.log("You Are Seller Of This NFT Therefor You Cannnot Buy This");
+        setMessage("You Are Seller Of This NFT Therefore You Cannnot Buy This");
       }
     } else {
       console.log("Connect Account!");
@@ -249,6 +264,20 @@ export const PurchaseNFT = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <Snackbar
+        style={{ marginTop: "50px", backgroundColor: "green" }}
+        open={open}
+        autoHideDuration={2000}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+      >
+        <Alert variant="filled" severity="success">
+          {message}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };
