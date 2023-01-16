@@ -144,8 +144,6 @@ export const AddNFT = () => {
       const signer = provider.getSigner();
       const signature = await signer.signMessage(e.target.result);
 
-      // const getAddress = await signer.getAddress();
-      // console.log("signature", signature, getAddress, account);
       setSignature(signature);
     };
   };

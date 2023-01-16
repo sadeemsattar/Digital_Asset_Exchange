@@ -22,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
   },
   menuButton: { marginRight: theme.spacing(2), color: "black" },
   title: {
-    // flexGrow: 1,
     marginRight: "50px",
     fontWeight: "bold",
     fontSize: 16,

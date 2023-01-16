@@ -95,26 +95,7 @@ export const ShowNFT = () => {
               >
                 Price
               </TableCell>
-              {/* <TableCell
-                align="right"
-                style={{
-                  fontWeight: "bold",
-                  fontSize: 16,
-                  color: "#C62662",
-                }}
-              >
-                Url
-              </TableCell> */}
-              {/* <TableCell
-                align="right"
-                style={{
-                  fontWeight: "bold",
-                  fontSize: 16,
-                  color: "#C62662",
-                }}
-              >
-                Status
-              </TableCell> */}
+
               <TableCell
                 align="right"
                 style={{
@@ -142,26 +123,11 @@ export const ShowNFT = () => {
                   {" "}
                   {Web3.utils.fromWei(`${row[3]}`, "ether")} Eth
                 </TableCell>
-                {/* <TableCell align="right">
-                  <a
-                    href={`https://testnets.opensea.io/assets/optimism-goerli/0xaa305c77b901a25efdcdb4fe2c37503dcd42fec9/${row[0]}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Visit Page
-                  </a>
-                </TableCell> */}
 
                 <TableCell align="right">
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    // onClick={() => {
-                    //   // gettokenUri(row[0]);
-                    // }}
-                  >
+                  <Button variant="contained" color="secondary">
                     <a
-                      href={`https://testnets.opensea.io/assets/optimism-goerli/0x4CcF84d1054f9E0b77726398d31F99D0D4496542/${row[0]}`}
+                      href={`https://testnets.opensea.io/assets/optimism-goerli/0xeec91F5F76773548B659Fb1f9506361418530AE4/${row[0]}`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >

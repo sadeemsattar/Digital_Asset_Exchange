@@ -200,7 +200,7 @@ export const ShowOwnerNFT = () => {
                 <TableCell align="right">
                   <Button variant="contained" color="secondary">
                     <a
-                      href={`https://testnets.opensea.io/assets/optimism-goerli/0x4CcF84d1054f9E0b77726398d31F99D0D4496542/${row[0]}`}
+                      href={`https://testnets.opensea.io/assets/optimism-goerli/0xeec91F5F76773548B659Fb1f9506361418530AE4/${row[0]}`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
